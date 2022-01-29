@@ -5,11 +5,8 @@ using System.Threading.Tasks;
 
 namespace Shop.Entities
 {
-    public class Category : IAudited
+    public interface IAudited
     {
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public ICollection<Product> Products { get; set; }
         public DateTime CreatedDate { get; set; }
         public DateTime? ModifiedDate { get; set; }
         public int CreatorId { get; set; }

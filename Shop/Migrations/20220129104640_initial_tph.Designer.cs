@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Shop.DB;
 
 namespace Shop.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220129104640_initial_tph")]
+    partial class initial_tph
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -163,6 +165,10 @@ namespace Shop.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Email")
                         .HasColumnType("nvarchar(max)");
 
@@ -181,6 +187,8 @@ namespace Shop.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users");
+
+                    b.HasDiscriminator<string>("Discriminator").HasValue("User");
                 });
 
             modelBuilder.Entity("Shop.Entities.Studnt", b =>
@@ -190,7 +198,7 @@ namespace Shop.Migrations
                     b.Property<string>("ClassNumber")
                         .HasColumnType("nvarchar(max)");
 
-                    b.ToTable("Studnts");
+                    b.HasDiscriminator().HasValue("Studnt");
                 });
 
             modelBuilder.Entity("Shop.Entities.Teacher", b =>
@@ -203,7 +211,7 @@ namespace Shop.Migrations
                     b.Property<string>("LessonName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.ToTable("Teachers");
+                    b.HasDiscriminator().HasValue("Teacher");
                 });
 
             modelBuilder.Entity("Shop.Entities.BookAuthor", b =>
@@ -245,24 +253,6 @@ namespace Shop.Migrations
                         .IsRequired();
 
                     b.Navigation("Student");
-                });
-
-            modelBuilder.Entity("Shop.Entities.Studnt", b =>
-                {
-                    b.HasOne("Shop.Entities.User", null)
-                        .WithOne()
-                        .HasForeignKey("Shop.Entities.Studnt", "Id")
-                        .OnDelete(DeleteBehavior.ClientCascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Shop.Entities.Teacher", b =>
-                {
-                    b.HasOne("Shop.Entities.User", null)
-                        .WithOne()
-                        .HasForeignKey("Shop.Entities.Teacher", "Id")
-                        .OnDelete(DeleteBehavior.ClientCascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("Shop.Entities.Author", b =>
